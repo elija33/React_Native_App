@@ -9,6 +9,9 @@ import RandomNumber from './RandomNumber';
      static propTyppes = {
         randomNumberCount: PropTypes.number.isRequired,
      };
+     state = {
+        selectedNumbers: [],
+     };
     
      randomNumbers = Array
         .from({ length: this.props.randomNumberCount })
@@ -16,18 +19,33 @@ import RandomNumber from './RandomNumber';
         target = this.randomNumbers
         .slice(0, this.props.randomNumberCount - 2)
         .reduce((acc, curr) => acc + curr, 0);
-  render() {
-    return (
-     <View style={styles.container}> 
-        <Text style={styles.target}>{this.target}</Text> 
-        <View style={styles.randomContainer}>
-        {this.randomNumbers.map((randomNumber, index) => 
-            <RandomNumber key={index} number={randomNumber} />
-        )} 
-         </View>
-     </View>
-    );
-  }
+
+        isNumberSelected = (numberIndex) => {
+            return this.state.selectedNumbers.indexOf(numberIndex) >= 0;
+        };
+        selectedNumbers = (numberIndex) => {
+            this.setState((prevState) => ({
+                selectedNumbers: [...prevState.selectedNumbers, numberIndex],
+            })); 
+        };
+        render() {
+            return (
+                <View style={styles.container}> 
+                    <Text style={styles.target}>{this.target}</Text> 
+                    <View style={styles.randomContainer}>
+                        {this.randomNumbers.map((randomNumber, index) => (
+                            <RandomNumber 
+                                key={index} 
+                                id={index}
+                                number={randomNumber} 
+                                isDisabled={this.isNumberSelected(index)}
+                                onPress={this.selectNumber}
+                        />
+                    ))} 
+                </View>
+            </View>
+        );
+    }
 }
 
 
