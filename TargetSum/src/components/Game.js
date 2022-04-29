@@ -10,6 +10,7 @@ import shuffle from 'lodash.shuffle';
      static propTyppes = {
         randomNumberCount: PropTypes.number.isRequired,
         initialSeconds: PropTypes.number.isRequired,
+        onPlayAgain: PropTypes.func.isRequired,
      };
      state = {
         selectedIds: [],
@@ -90,11 +91,16 @@ import shuffle from 'lodash.shuffle';
                                 key={index} 
                                 id={index}
                                 number={randomNumber} 
-                                isDisabled={this.isNumberSelected(index) || gameStatus !== 'PLAYING'}
+                                isDisabled={
+                                    this.isNumberSelected(index) || gameStatus !== 'PLAYING'
+                                }
                                 onPress={this.selectNumber}
                         />
                     ))} 
                 </View>
+                {this.gameStatus !== 'PLAYING' && (
+                     <Button title="Play Again" onPress={this.props.onPlayAgain} />
+                     )}
                 <Text>{this.state.remainingSeconds}</Text>
             </View>
         );
